@@ -1,55 +1,29 @@
 # Child Nutritional Status & Stunting Detection API
 
-Repositori ini berisi kode sumber untuk REST API yang dikembangkan untuk mengklasifikasikan **status gizi anak** dan **mendeteksi stunting** berdasarkan data antropometri. Proyek ini memanfaatkan algoritma **Support Vector Machine (SVM)** dan dirancang untuk diintegrasikan ke dalam aplikasi klien seperti **Gerakan Sayang Anak** oleh **DP3A (Dinas Pemberdayaan Perempuan dan Perlindungan Anak) Kalimantan Barat**.
+## About The Project
 
-Tujuan utama proyek ini adalah untuk menyediakan **layanan klasifikasi real-time** yang andal untuk digunakan oleh **tenaga kesehatan** dan **orang tua** dalam memantau pertumbuhan anak, memungkinkan **deteksi dini dan intervensi** untuk masalah gizi seperti stunting.
+This repository contains the source code for a REST API developed to classify child nutritional status and detect stunting based on anthropometric data. The project utilizes the Support Vector Machine (SVM) algorithm and is designed to be integrated into a client application, such as the "Gerakan Sayang Anak" app by the DP3A (Agency for Women's Empowerment and Child Protection) of West Kalimantan.
 
----
+The primary goal is to provide a reliable, real-time classification service that can be used by health workers and parents to monitor child growth, enabling early detection and intervention for nutritional issues like stunting.
 
-## 📚 Daftar Isi
+## Key Features
 
-1. [Tentang Proyek](#tentang-proyek)
+* **Dual Classification Models**: Implements two separate SVM models:
 
-   * [Fitur Utama](#fitur-utama)
-   * [Dibangun Dengan](#dibangun-dengan)
-2. [Memulai](#memulai)
+  * **Stunting Detection**: Classifies stunting status based on Height-for-Age (HAZ).
+  * **Nutritional Status Classification**: Classifies nutritional status based on Weight-for-Age (WAZ).
 
-   * [Prasyarat](#prasyarat)
-   * [Instalasi](#instalasi)
-3. [Penggunaan](#penggunaan)
+* **WHO Standards Integration**: Includes a Z-score calculator based on World Health Organization (WHO) growth standards, providing a medical reference for each classification.
 
-   * [Cara Kerja](#cara-kerja)
-   * [Endpoint API](#endpoint-api)
-4. [Berkontribusi](#berkontribusi)
-5. [Lisensi](#lisensi)
-6. [Kontak](#kontak)
-7. [Ucapan Terima Kasih](#ucapan-terima-kasih)
+* **Dual-Output Response**: The API returns both the Machine Learning (ML) model's prediction and the classification based on WHO's Z-score standards, offering a comprehensive result for validation.
 
----
+* **Ready for Integration**: Developed as a REST API using Flask, making it easy to integrate with various client applications (e.g., mobile apps, web dashboards).
 
-## Tentang Proyek
+* **Deployed on Cloud**: The service is containerized using Docker and deployed on Google Cloud Run for scalability and high availability.
 
-### Fitur Utama
+## Built With
 
-* **Model Klasifikasi Ganda**:
-  Mengimplementasikan dua model SVM terpisah:
-
-  1. **Deteksi Stunting** berdasarkan **Tinggi Badan menurut Umur (TB/U)**
-  2. **Klasifikasi Status Gizi** berdasarkan **Berat Badan menurut Umur (BB/U)**
-
-* **Integrasi Standar WHO**:
-  Menggunakan kalkulator **Z-score** berdasarkan standar pertumbuhan WHO untuk memberikan referensi medis terhadap klasifikasi.
-
-* **Respons Output Ganda**:
-  API mengembalikan hasil **prediksi Machine Learning** dan klasifikasi berdasarkan **Z-score WHO**, memungkinkan validasi hasil yang lebih kuat.
-
-* **Siap untuk Integrasi**:
-  Dibuat sebagai REST API menggunakan **Flask**, sehingga mudah diintegrasikan dengan berbagai aplikasi klien (mobile/web).
-
-* **Di-deploy di Cloud**:
-  Layanan API dikontainerisasi dengan **Docker** dan di-deploy di **Google Cloud Run** untuk skalabilitas dan ketersediaan tinggi.
-
-### Dibangun Dengan
+This project was built using the following technologies:
 
 * Python
 * Flask
@@ -58,53 +32,59 @@ Tujuan utama proyek ini adalah untuk menyediakan **layanan klasifikasi real-time
 * NumPy
 * Docker
 * Google Cloud Run
+* Google Container Registry
 
----
+## Getting Started
 
-## Memulai
+To get a local copy up and running, follow these simple steps.
 
-Untuk menjalankan salinan lokal proyek ini, ikuti langkah-langkah berikut:
-
-### Prasyarat
+### Prerequisites
 
 * Python 3.9+
-* Docker (opsional)
+* Docker
 
-### Instalasi
+### Installation
+
+1. Clone the repo
 
 ```bash
-# 1. Kloning repositori ini
-git clone https://github.com/[Nama-Pengguna-GitHub-Anda]/[Nama-Repositori-Anda].git
-
-# 2. Masuk ke direktori proyek
-cd [Nama-Repositori-Anda]
-
-# 3. Instal paket Python yang diperlukan
-pip install -r requirements.txt
-
-# 4. Jalankan aplikasi Flask secara lokal
-python main.py
+git clone https://github.com/your_username/your_repository.git
 ```
 
-Aplikasi akan berjalan di `http://127.0.0.1:5000`.
+2. Navigate to the project directory
 
----
+```bash
+cd your_repository
+```
 
-## Penggunaan
+3. Install Python packages
 
-### Cara Kerja
+```bash
+pip install -r requirements.txt
+```
 
-1. API memvalidasi data input.
-2. Menghitung Z-score dan menentukan klasifikasi WHO untuk **TB/U** dan **BB/U**.
-3. Melakukan pra-pemrosesan data dan mengirimkan ke masing-masing model **SVM**.
-4. Mengembalikan hasil prediksi dan klasifikasi akhir dalam format JSON.
+4. (Optional) To run with Docker, build the image:
 
-### Endpoint API
+```bash
+docker build -t stunting-api .
+```
+
+## Usage
+
+The API provides a single endpoint (`/predict`) that accepts a POST request with a JSON payload containing a child's anthropometric data (age in months, gender, height in cm, and weight in kg).
+
+### How It Works
+
+1. The API validates the incoming data.
+2. It calculates the Z-score and determines the WHO classification for both Height-for-Age and Weight-for-Age.
+3. It preprocesses the input data and feeds it to the respective trained SVM models to get the ML predictions.
+4. It returns a JSON response containing a consolidated result, including the Z-score, WHO classification, ML prediction, and a final classification for both height and weight status.
+
+### API Endpoint
 
 **POST** `/predict`
-Menerima permintaan JSON seperti berikut:
 
-#### Contoh Request:
+#### Request Body:
 
 ```json
 {
@@ -115,7 +95,7 @@ Menerima permintaan JSON seperti berikut:
 }
 ```
 
-#### Contoh Success Response:
+#### Success Response:
 
 ```json
 {
@@ -134,42 +114,25 @@ Menerima permintaan JSON seperti berikut:
 }
 ```
 
----
+## Contributing
 
-## Berkontribusi
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
-Kontribusi sangat dihargai! Jika Anda memiliki saran untuk meningkatkan proyek ini:
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
 
-1. **Fork proyek ini**
-2. **Buat branch fitur baru**
-   `git checkout -b feature/NamaFitur`
-3. **Commit perubahan**
-   `git commit -m 'Menambahkan fitur keren'`
-4. **Push ke branch Anda**
-   `git push origin feature/NamaFitur`
-5. **Buka Pull Request**
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Atau buka issue dengan label `enhancement` jika ada ide/masukan.
+## License
 
----
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-## Lisensi
+## Contact
 
-Didistribusikan di bawah Lisensi MIT. Lihat berkas `LICENSE.txt` untuk detail lebih lanjut.
+Your Name - [@your\_twitter](https://twitter.com/your_twitter) - [email@example.com](mailto:email@example.com)
 
----
-
-## Kontak
-
-**Bintang Budi Pangestu**
-📧 Email: \[Email Anda]
-🔗 LinkedIn: \[Profil LinkedIn Anda (opsional)]
-📁 Tautan Proyek: [https://github.com/Nama-Pengguna-GitHub-Anda/Nama-Repositori-Anda](https://github.com/Nama-Pengguna-GitHub-Anda/Nama-Repositori-Anda)
-
----
-
-## Ucapan Terima Kasih
-
-* Dinas Pemberdayaan Perempuan dan Perlindungan Anak (DP3A) Provinsi Kalimantan Barat
-* Program Studi Teknik Informatika, Universitas Tanjungpura
-* Dosen Pembimbing: Dr. Arif Bijaksana Putra N, S.T., M.T.
+Project Link: [https://github.com/your\_username/your\_repository](https://github.com/your_username/your_repository)
