@@ -1,0 +1,8 @@
+Flask
+gunicorn
+tensorflow==2.17.0
+numpy==1.26.4
+pillow
+scikit-learn
+pandas
+joblib
