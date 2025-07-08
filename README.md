@@ -130,9 +130,3 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-## Contact
-
-Your Name - [@your\_twitter](https://twitter.com/your_twitter) - [email@example.com](mailto:email@example.com)
-
-Project Link: [https://github.com/your\_username/your\_repository](https://github.com/your_username/your_repository)
