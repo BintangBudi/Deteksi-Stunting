@@ -54,7 +54,7 @@ git clone https://github.com/BintangBudi/Deteksi-Stunting.git
 2. Navigate to the project directory
 
 ```bash
-cd your_repository
+cd Deteksi-Stunting
 ```
 
 3. Install Python packages
